@@ -2,7 +2,6 @@
 <template>
     <div>
       <h1>Your Wishlist</h1>
-      <!-- Wishlist content goes here -->
     </div>
   </template>
   
