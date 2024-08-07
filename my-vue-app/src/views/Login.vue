@@ -1,4 +1,3 @@
-<!-- Login.vue -->
 <template>
     <div>
       <h1>Login</h1>
@@ -13,13 +12,35 @@
   <script>
   export default {
     name: 'Login',
+  
+    /**
+     * The data function returns the initial state of the component's data.
+     * @returns {Object} The initial state of the component's data.
+     */
     data() {
       return {
+        /**
+         * The username entered by the user.
+         * @type {string}
+         */
         username: '',
+  
+        /**
+         * The password entered by the user.
+         * @type {string}
+         */
         password: ''
       };
     },
+  
     methods: {
+      /**
+       * Handles the login process.
+       * Makes an asynchronous API call using the entered username and password.
+       * Logs the response to the console or logs an error if the login fails.
+       * @async
+       * @returns {Promise<void>}
+       */
       async handleLogin() {
         try {
           // Assume some async operation here, e.g., an API call

@@ -11,13 +11,36 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
-const route = useRoute();
+/**
+ * Reactive reference to store the product details.
+ * @type {Object}
+ */
 const product = ref({});
 
-onMounted(async () => {
-  const response = await fetch(`https://fakestoreapi.com/products/${route.params.id}`);
-  product.value = await response.json();
-});
+/**
+ * Provides access to the current route and its parameters.
+ * @returns {Object} The current route.
+ */
+const route = useRoute();
+
+/**
+ * Fetches the product data based on the route parameter `id`
+ * and assigns it to the `product` reference.
+ * 
+ * @async
+ * @function fetchProduct
+ * @returns {Promise<void>} A promise that resolves when the product data has been fetched.
+ */
+const fetchProduct = async () => {
+  try {
+    const response = await fetch(`https://fakestoreapi.com/products/${route.params.id}`);
+    product.value = await response.json();
+  } catch (error) {
+    console.error('Error fetching product data:', error);
+  }
+};
+
+onMounted(fetchProduct);
 </script>
 
 <style scoped>

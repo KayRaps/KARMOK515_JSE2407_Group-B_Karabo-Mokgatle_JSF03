@@ -108,11 +108,28 @@
 </template>
 
 <script setup>
+/**
+ * @module Navbar
+ * @description
+ * This component is responsible for rendering the navigation bar of the application. 
+ * It includes links to different pages like Wishlist, Cart, and Login.
+ */
+
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 
+/**
+ * @constant {Ref<boolean>} showNavbar
+ * @description
+ * A ref that keeps track of whether the mobile navigation menu is visible.
+ */
 const showNavbar = ref(false);
 
+/**
+ * @function toggleNavbar
+ * @description
+ * Toggles the visibility of the mobile navigation menu.
+ */
 const toggleNavbar = () => {
   showNavbar.value = !showNavbar.value;
 };

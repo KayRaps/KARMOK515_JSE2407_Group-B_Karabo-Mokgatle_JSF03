@@ -20,12 +20,32 @@
 <script setup>
 import { computed } from 'vue'
 
+/**
+ * Props for the ProductCard component
+ * @typedef {Object} Props
+ * @property {Object} product - The product object containing details to display
+ * @property {string} product.id - The unique identifier for the product
+ * @property {string} product.image - The URL of the product image
+ * @property {string} product.title - The title of the product
+ * @property {number} product.price - The price of the product
+ * @property {string} product.category - The category of the product
+ * @property {string} product.description - The description of the product
+ * @property {Object} product.rating - The rating object for the product
+ * @property {number} product.rating.rate - The average rating value
+ * @property {number} product.rating.count - The number of reviews
+ * @property {boolean} isFavorite - A flag indicating if the product is a favorite
+ * @property {Function} toggleFavorite - Function to toggle the favorite status of the product
+ */
+
 const props = defineProps({
   product: Object,
   isFavorite: Boolean,
   toggleFavorite: Function,
 })
 
+/**
+ * Toggles the favorite status of the product
+ */
 const toggleFavorite = () => {
   props.toggleFavorite(props.product.id)
 }
