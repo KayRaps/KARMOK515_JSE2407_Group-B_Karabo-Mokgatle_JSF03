@@ -1,99 +1,120 @@
 <template>
-  <div class="container mx-auto p-6">
-    <div v-if="product" class="max-w-2xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-      <img :src="product.image" alt="product" class="w-full h-64 object-cover" />
-      <div class="p-4">
-        <h3 class="text-2xl font-semibold">{{ product.name }}</h3>
-        <p class="text-gray-500">{{ product.description }}</p>
-        <p class="text-blue-500 font-bold text-lg">R{{ product.price }}</p>
-        <button @click="addToCart(product)" class="mt-2 bg-blue-500 text-white p-2 rounded">
-          Add to Cart
-        </button>
+  <div>
+    <div class="container mx-auto p-4">
+      <div v-if="loading">
+        <card-skeleton />
       </div>
-    </div>
-    <div v-else class="text-center">
-      <p>Product not found.</p>
-      <router-link to="/" class="text-blue-500">Go back to products</router-link>
+      <div v-else-if="product" class="product-detail">
+        <img :src="product.image" :alt="product.title" class="product-image" />
+        <div class="product-info">
+          <h2>{{ product.title }}</h2>
+          <p>{{ product.description }}</p>
+          <p class="price">${{ product.price }}</p>
+          <p>Category: {{ product.category }}</p>
+          <p>
+            Ratings: {{ product.rating.rate }} (Based on
+            {{ product.rating.count }} reviews)
+          </p>
+          <button @click="goBack" class="back-button">
+            Back to Product List
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {
-  /**
-   * @module ProductDetails
-   * @description A Vue component for displaying product details and allowing users to add products to their cart.
-   */
-  data() {
-    return {
-      /**
-       * @typedef {Object} Product
-       * @property {number} id - The unique identifier for the product.
-       * @property {string} name - The name of the product.
-       * @property {string} description - A brief description of the product.
-       * @property {number} price - The price of the product in Rands.
-       * @property {string} image - The URL to the product image.
-       * @property {string} category - The category the product belongs to.
-       */
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import CardSkeleton from "./CardSkeleton.vue";
 
-      /**
-       * @type {Product[]}
-       * @description An array of available products.
-       */
-      products: [
-        {
-          id: 1,
-          name: "Product 1",
-          description: "Description for Product 1",
-          price: 100,
-          image: "src/assets/image1.jpg",
-          category: "Category 1",
-        },
-        {
-          id: 2,
-          name: "Product 2",
-          description: "Description for Product 2",
-          price: 200,
-          image: "src/assets/image2.jpg",
-          category: "Category 2",
-        },
-        {
-          id: 3,
-          name: "Product 3",
-          description: "Description for Product 3",
-          price: 300,
-          image: "src/assets/image3.jpg",
-          category: "Category 1",
-        },
-        {
-          id: 4,
-          name: "Product 4",
-          description: "Description for Product 4",
-          price: 400,
-          image: "src/assets/image4.jpg",
-          category: "Category 3",
-        },
-      ],
-    };
-  },
-  computed: {
-    /**
-     * @description Computes the current product based on the route parameter.
-     * @returns {Product | undefined} The current product object or undefined if not found.
-     */
-    product() {
-      const productId = parseInt(this.$route.params.id);
-      return this.products.find((product) => product.id === productId);
-    },
-  },
-  methods: {
-    /**
-     * @description Adds the specified product to the shopping cart.
-     * @param {Product} product - The product to add to the cart.
-     */
-    addToCart(product) {
-      console.log(`Added ${product.name} to cart`);
-    },
-  },
+export default {
+name: "ProductDetail",
+components: {
+  CardSkeleton,
+},
+setup() {
+  const route = useRoute();
+  const router = useRouter();
+  const product = ref(null);
+  const loading = ref(true);
+
+  const fetchProduct = async () => {
+    const id = route.params.id;
+    try {
+      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+      product.value = await response.json();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const goBack = () => {
+    router.push({ path: "/", query: route.query });
+  };
+
+  onMounted(fetchProduct);
+
+  return {
+    product,
+    loading,
+    goBack,
+  };
+},
 };
 </script>
+
+<style>
+.product-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: rgb(240, 222, 222);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 2rem auto;
+}
+.product-image {
+  flex: 1;
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.product-info {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.price {
+  color: blue;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+p {
+  margin-bottom: 0.5rem;
+}
+.back-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.back-button:hover {
+  background-color: #a1c1e2;
+}
+</style>
