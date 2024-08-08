@@ -1,6 +1,6 @@
 <template>
   <header class="sticky top-0 z-50 p-0">
-    <nav class="bg-gray-500">
+    <nav class="bg-blue-300">
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <!-- Logo and Site Name -->
         <router-link to="/">
