@@ -9,7 +9,7 @@
 
 <script>
 import { defineComponent, ref, onMounted } from "vue";
-import Header from "./components/NavBar.vue";
+import Header from "./components/Header.vue";
 
 /**
  * The main application component.
